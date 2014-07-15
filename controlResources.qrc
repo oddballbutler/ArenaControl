@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>Traffic_light_green.jpg</file>
+        <file>Traffic_light_red.jpg</file>
+        <file>Traffic_light_yellow.jpg</file>
+        <file>Red_Button_small.png</file>
+        <file>lightGreenOff.jpg</file>
+        <file>lightGreenOn.jpg</file>
+        <file>lightRedOff.jpg</file>
+        <file>lightRedOn.jpg</file>
+        <file>lightYellowOff.jpg</file>
+        <file>lightYellowOn.jpg</file>
+        <file>beep-6.wav</file>
+        <file>beep-7.wav</file>
+        <file>sound113.wav</file>
+    </qresource>
+</RCC>
