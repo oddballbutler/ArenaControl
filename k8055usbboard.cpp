@@ -2,6 +2,7 @@
 #include <QLibrary>
 #include <iostream>
 #include <QTimer>
+#include <QtDebug>
 using namespace std;
 
 K8055USBBoard::K8055USBBoard(QObject *parent) :
@@ -9,34 +10,39 @@ K8055USBBoard::K8055USBBoard(QObject *parent) :
     connected(false)
 {
     QLibrary myLib("k8055");
+    if (!myLib.load())
+        qDebug() << myLib.errorString();
+    else
+        qDebug() << "library loaded";
 
-        k8055OpenDevice = (k8055OpenDeviceFunct) myLib.resolve("OpenDevice");
-        k8055CloseDevice = (k8055CloseDeviceFunct) myLib.resolve("CloseDevice");
-        k8055ReadAnalogChannel = (k8055ReadAnalogChannelFunct) myLib.resolve("ReadAnalogChannel");
-        k8055ReadAllAnalog = (k8055ReadAllAnalogFunct) myLib.resolve("ReadAllAnalog");
-        k8055OutputAnalogChannel = (k8055OutputAnalogChannelFunct) myLib.resolve("OutputAnalogChannel");
-        k8055OutputAllAnalog = (k8055OutputAllAnalogFunct) myLib.resolve("OutputAllAnalog");
-        k8055ClearAnalogChannel = (k8055ClearAnalogChannelFunct) myLib.resolve("ClearAnalogChannel");
-        k8055ClearAllAnalog = (k8055ClearAllAnalogFunct) myLib.resolve("ClearAllAnalog");
-        k8055SetAnalogChannel = (k8055SetAnalogChannelFunct) myLib.resolve("SetAnalogChannel");
-        k8055SetAllAnalog = (k8055SetAllAnalogFunct) myLib.resolve("SetAllAnalog");
-        k8055WriteAllDigital = (k8055WriteAllDigitalFunct) myLib.resolve("WriteAllDigital");
-        k8055ClearDigitalChannel = (k8055ClearDigitalChannelFunct) myLib.resolve("ClearDigitalChannel");
-        k8055ClearAllDigital = (k8055ClearAllDigitalFunct) myLib.resolve("ClearAllDigital");
-        k8055SetDigitalChannel = (k8055SetDigitalChannelFunct) myLib.resolve("SetDigitalChannel");
-        k8055SetAllDigital = (k8055SetAllDigitalFunct) myLib.resolve("SetAllDigital");
-        k8055ReadDigitalChannel = (k8055ReadDigitalChannelFunct) myLib.resolve("ReadDigitalChannel");
-        k8055ReadAllDigital = (k8055ReadAllDigitalFunct) myLib.resolve("ReadAllDigital");
-        k8055ResetCounter = (k8055ResetCounterFunct) myLib.resolve("ResetCounter");
-        k8055ReadCounter = (k8055ReadCounterFunct) myLib.resolve("ReadCounter");
-        k8055SetCounterDebounceTime = (k8055SetCounterDebounceTimeFunct) myLib.resolve("SetCounterDebounceTime");
+    k8055OpenDevice = (k8055OpenDeviceFunct) myLib.resolve("OpenDevice");
+    k8055CloseDevice = (k8055CloseDeviceFunct) myLib.resolve("CloseDevice");
+    k8055ReadAnalogChannel = (k8055ReadAnalogChannelFunct) myLib.resolve("ReadAnalogChannel");
+    k8055ReadAllAnalog = (k8055ReadAllAnalogFunct) myLib.resolve("ReadAllAnalog");
+    k8055OutputAnalogChannel = (k8055OutputAnalogChannelFunct) myLib.resolve("OutputAnalogChannel");
+    k8055OutputAllAnalog = (k8055OutputAllAnalogFunct) myLib.resolve("OutputAllAnalog");
+    k8055ClearAnalogChannel = (k8055ClearAnalogChannelFunct) myLib.resolve("ClearAnalogChannel");
+    k8055ClearAllAnalog = (k8055ClearAllAnalogFunct) myLib.resolve("ClearAllAnalog");
+    k8055SetAnalogChannel = (k8055SetAnalogChannelFunct) myLib.resolve("SetAnalogChannel");
+    k8055SetAllAnalog = (k8055SetAllAnalogFunct) myLib.resolve("SetAllAnalog");
+    k8055WriteAllDigital = (k8055WriteAllDigitalFunct) myLib.resolve("WriteAllDigital");
+    k8055ClearDigitalChannel = (k8055ClearDigitalChannelFunct) myLib.resolve("ClearDigitalChannel");
+    k8055ClearAllDigital = (k8055ClearAllDigitalFunct) myLib.resolve("ClearAllDigital");
+    k8055SetDigitalChannel = (k8055SetDigitalChannelFunct) myLib.resolve("SetDigitalChannel");
+    k8055SetAllDigital = (k8055SetAllDigitalFunct) myLib.resolve("SetAllDigital");
+    k8055ReadDigitalChannel = (k8055ReadDigitalChannelFunct) myLib.resolve("ReadDigitalChannel");
+    k8055ReadAllDigital = (k8055ReadAllDigitalFunct) myLib.resolve("ReadAllDigital");
+    k8055ResetCounter = (k8055ResetCounterFunct) myLib.resolve("ResetCounter");
+    k8055ReadCounter = (k8055ReadCounterFunct) myLib.resolve("ReadCounter");
+    k8055SetCounterDebounceTime = (k8055SetCounterDebounceTimeFunct) myLib.resolve("SetCounterDebounceTime");
 
-        long address = BOARD_ADDRESS;
-        if(OpenDevice(address) == address)
-            connected = true;
+    long address = BOARD_ADDRESS;
+    if(OpenDevice(address) == address)
+        connected = true;
 
-        SetCounterDebounceTime(1, 1000);
-        SetCounterDebounceTime(2, 1000);
+
+    SetCounterDebounceTime(1, 1000);
+    SetCounterDebounceTime(2, 1000);
 
 }
 
