@@ -62,3 +62,13 @@ void AudienceScreen::closeEvent(QCloseEvent *event)
     event->accept();
     emit closed(true);
  }
+
+void AudienceScreen::updateTeam1Name(QString name)
+{
+    ui->team1Label->setText(name);
+}
+
+void AudienceScreen::updateTeam2Name(QString name)
+{
+    ui->team2Label->setText(name);
+}

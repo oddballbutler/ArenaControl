@@ -6,6 +6,7 @@
 #include "k8055usbboard.h"
 #include "controllights.h"
 #include "audiencescreen.h"
+#include "controlboardinterface.h"
 
 namespace Ui {
     class ArenaControl;
@@ -48,10 +49,13 @@ private slots:
     void turnLightsOff();
     void blinkLights();
     void turnLightsOn(const int _lights[]);
+    void updateTeam1Name();
+    void updateTeam2Name();
 
 private:
     Ui::ArenaControl *ui;
     AudienceScreen *screen2;
+    ControlBoardInterface *controlBoard;
     K8055USBBoard *usbBoard;
     EventState state;
     bool team1Ready;

@@ -6,7 +6,7 @@
 #include <QIntValidator>
 #include <QTimer>
 #include <QCloseEvent>
-#include <QMessageBox>
+//#include <QGraphicsDropShadowEffect>
 using namespace std;
 
 ArenaControl::ArenaControl(QWidget *parent) :
@@ -35,6 +35,11 @@ ArenaControl::ArenaControl(QWidget *parent) :
     ui->timeSetLineEdit->setValidator(validator);
 
     usbBoard = new K8055USBBoard(this);
+    if(usbBoard->isConnected())
+    {
+        ui->usbLabel->setText("USB Interface\nConnected");
+        ui->usbLabel->setStyleSheet("");
+    }
 
     for(int i = 0; i < 3; i++)
         lightArray[i] = 0;
@@ -59,7 +64,7 @@ ArenaControl::ArenaControl(QWidget *parent) :
     checkInputTimer->start(timerTime);
     stateToWaitingOnMatch();
 
-    ready = new QSound("/Users/jeremybutler/Workspace/EventControl/sound113.wav",this);
+    ready = new QSound(":/resources/sound113.wav",this);
 
     screen2->show();
     screen2->children();
@@ -67,7 +72,15 @@ ArenaControl::ArenaControl(QWidget *parent) :
     screen2->updateTimer(ui->lcdNumber);
     connect(screen2,SIGNAL(closed(bool)),ui->actionAudienceWindow,SLOT(toggle()));
     connect(ui->actionAudienceWindow,SIGNAL(triggered()),this,SLOT(audienceWindowActionTriggered()));
+    connect(ui->team1Name,SIGNAL(editingFinished()),this,SLOT(updateTeam1Name()));
+    connect(ui->team2Name,SIGNAL(editingFinished()),this,SLOT(updateTeam2Name()));
     ui->menuBar->setParent(NULL);
+
+//    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
+//    effect->setBlurRadius(0);
+//    effect->setColor(QColor("#EEEEEE"));
+//    effect->setOffset(1,1);
+//    ui->team1TextLabel->setGraphicsEffect(effect);
 }
 
 ArenaControl::~ArenaControl()
@@ -85,7 +98,9 @@ void ArenaControl::team1ButtonPress()
         {
             team1Ready = true;
             ui->statusLabel->setText("Waiting on Team 2");
+            checkInputTimer->stop();
             ready->play();
+            checkInputTimer->start();
         }
         if(team1Ready && team2Ready)
         {
@@ -94,15 +109,15 @@ void ArenaControl::team1ButtonPress()
             bBlink = true;
             bCheckInput = false;
         }
+
     }
     else if(state == COUNTDOWN)
     {
         ui->statusBar->showMessage("Team 1 Tapped Out", 5000);
         ui->statusLabel->setText("Team 1 Tapped Out");
         ui->lcdNumber->stop();
-        bCheckInput = false;
+        checkInputTimer->stop();
         turnRedLightsOn();
-        QSound::play("/Users/jeremybutler/Workspace/EventControl/BUZZER.WAV");
         QTimer::singleShot(5000, this, SLOT(stateToWaitingOnMatch()));
     }
 }
@@ -115,7 +130,9 @@ void ArenaControl::team2ButtonPress()
         {
             team2Ready = true;
             ui->statusLabel->setText("Waiting on Team 1");
+            checkInputTimer->stop();
             ready->play();
+            checkInputTimer->start();
         }
         if(team1Ready && team2Ready)
         {
@@ -130,17 +147,14 @@ void ArenaControl::team2ButtonPress()
         ui->statusBar->showMessage("Team 2 Tapped Out", 5000);
         ui->statusLabel->setText("Team 2 Tapped Out");
         ui->lcdNumber->stop();
-        bCheckInput = false;
+        checkInputTimer->stop();
         turnRedLightsOn();
-        QSound::play("/Users/jeremybutler/Workspace/EventControl/BUZZER.WAV");
         QTimer::singleShot(5000, this, SLOT(stateToWaitingOnMatch()));
     }
 }
 
 void ArenaControl::stateToStartCountDown()
 {
-    checkInputTimer->stop();
-    state = START_COUNTDOWN;
     ui->startPushButton->setEnabled(false);
     ui->endPushButton->setEnabled(false);
     ui->timeSetLineEdit->setEnabled(false);
@@ -148,16 +162,19 @@ void ArenaControl::stateToStartCountDown()
     ui->lcdNumber->setStyleSheet("color:red");
     bBlink = false;
     bCheckInput = false;
+    checkInputTimer->stop();
+    state = START_COUNTDOWN;
     turnRedLightsOn();
+    //checkInputTimer->start();
     ui->statusLabel->setText("Match starts in:");
 }
 
 void ArenaControl::stateToCountDown()
 {
-    state = COUNTDOWN;
     bBlink = false;
     bCheckInput = true;
     checkInputTimer->start();
+    state = COUNTDOWN;
     ui->lcdNumber->setStyleSheet("");
     ui->startPushButton->setEnabled(false);
     ui->pausePushButton->setEnabled(true);
@@ -168,12 +185,12 @@ void ArenaControl::stateToCountDown()
 
 void ArenaControl::stateToWaitingOnMatch()
 {
-    state = WAITING_ON_MATCH;
     ui->endPushButton->setEnabled(false);
     ui->pausePushButton->setEnabled(false);
     ui->prepareButton->setEnabled(true);
     ui->timeSetLineEdit->setEnabled(true);
     ui->timeSetPushButton->setEnabled(true);
+    state = WAITING_ON_MATCH;
     bBlink = false;
     bCheckInput = false;
     checkInputTimer->stop();
@@ -187,8 +204,6 @@ void ArenaControl::stateToWaitingOnMatch()
 void ArenaControl::stateToWaitingOnTeams()
 {
     state = WAITING_ON_TEAMS;
-    team1Ready = false;
-    team2Ready = false;
     ui->endPushButton->setEnabled(true);
     ui->pausePushButton->setEnabled(false);
     ui->prepareButton->setEnabled(false);
@@ -198,6 +213,8 @@ void ArenaControl::stateToWaitingOnTeams()
     bBlink = true;
     checkInputTimer->start();
     turnYellowLightsOn();
+    team1Ready = false;
+    team2Ready = false;
     ui->startPushButton->setEnabled(false);
     ui->statusLabel->setText("Waiting on Teams");
 }
@@ -334,14 +351,12 @@ void ArenaControl::checkInput()
     if(bCheckInput)
     {
         if (usbBoard->ReadDigitalChannel(1))
-            team1ButtonPress();
-    }
-    if(bCheckInput)
-    {
+            if (usbBoard->ReadDigitalChannel(1))
+                team1ButtonPress();
         if (usbBoard->ReadDigitalChannel(2))
-            team2ButtonPress();
+            if (usbBoard->ReadDigitalChannel(2))
+                team2ButtonPress();
     }
-    usbBoard->ReadAllDigital();
 
     if(wasRunning)
         checkInputTimer->start();
@@ -358,4 +373,14 @@ void ArenaControl::audienceWindowActionTriggered()
     {
         screen2->show();
     }
+}
+
+void ArenaControl::updateTeam1Name()
+{
+    screen2->updateTeam1Name(ui->team1Name->text());
+}
+
+void ArenaControl::updateTeam2Name()
+{
+    screen2->updateTeam2Name(ui->team2Name->text());
 }

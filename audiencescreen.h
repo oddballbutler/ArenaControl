@@ -24,6 +24,8 @@ void closed(bool);
 
 public slots:
     void updateTimer(const Timer *n);
+    void updateTeam1Name(QString name);
+    void updateTeam2Name(QString name);
     void enterFullScreen();
     void exitFullScreen();
 

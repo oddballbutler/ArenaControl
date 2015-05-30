@@ -2,10 +2,11 @@
 #define K8055USBBOARD_H
 
 #include <QObject>
+#include "controlboardinterface.h"
 
 const int BOARD_ADDRESS = 0; //depending on sk5 and sk6
 
-class K8055USBBoard : public QObject
+class K8055USBBoard : public QObject, public ControlBoardInterface
 {
     Q_OBJECT
 
@@ -34,7 +35,7 @@ public slots:
     long ReadAllDigital(void);
     void ResetCounter(long x);
     long ReadCounter(long x);
-    void SetCounterDebounceTime(long x, long y);
+    int SetCounterDebounceTime(long x, long y);
     bool isConnected();
 
 private:
@@ -57,7 +58,7 @@ private:
     typedef long (*k8055ReadAllDigitalFunct)(void);
     typedef void (*k8055ResetCounterFunct)(long);
     typedef long (*k8055ReadCounterFunct)(long);
-    typedef void (*k8055SetCounterDebounceTimeFunct)(long, long);
+    typedef int (*k8055SetCounterDebounceTimeFunct)(long, long);
     k8055OpenDeviceFunct k8055OpenDevice;
     k8055CloseDeviceFunct k8055CloseDevice;
     k8055ReadAnalogChannelFunct k8055ReadAnalogChannel;

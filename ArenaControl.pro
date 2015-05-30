@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     robot.cpp \
     team.cpp \
     audiencescreen.cpp \
-    arenacontrol.cpp
+    arenacontrol.cpp \
+    serialcontrolboard.cpp \
+    ccrsmallarena.cpp
 
 HEADERS  += \
     timer.h \
@@ -34,7 +36,11 @@ HEADERS  += \
     robot.h \
     team.h \
     audiencescreen.h \
-    arenacontrol.h
+    arenacontrol.h \
+    controlboardinterface.h \
+    serialcontrolboard.h \
+    arenaInterface.h \
+    ccrsmallarena.h
 
 FORMS    += arenacontrol.ui \
     audiencescreen.ui
