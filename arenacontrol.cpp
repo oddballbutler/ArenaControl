@@ -59,7 +59,7 @@ ArenaControl::ArenaControl(QWidget *parent) :
     checkInputTimer->start(timerTime);
     stateToWaitingOnMatch();
 
-    ready = new QSound("/Users/jeremybutler/Workspace/EventControl/sound113.wav",this);
+    ready = new QSound(":/resources/sound113.wav",this);
 
     screen2->show();
     screen2->children();
