@@ -13,5 +13,15 @@
         <file>beep-6.wav</file>
         <file>beep-7.wav</file>
         <file>sound113.wav</file>
+        <file>1.wav</file>
+        <file>2.wav</file>
+        <file>3.wav</file>
+        <file>4.wav</file>
+        <file>5.wav</file>
+        <file>6.wav</file>
+        <file>7.wav</file>
+        <file>8.wav</file>
+        <file>9.wav</file>
+        <file>10.wav</file>
     </qresource>
 </RCC>
