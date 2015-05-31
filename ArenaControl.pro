@@ -41,3 +41,8 @@ FORMS    += arenacontrol.ui \
 
 RESOURCES += \
     controlResources.qrc
+
+install_libs.path = $$OUT_PWD/lib
+install_libs.files += k8055.dll
+
+INSTALLS += install_libs
