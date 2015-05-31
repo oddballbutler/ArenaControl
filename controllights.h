@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QLabel>
 #include <QTimer>
-#include <k8055usbboard.h>
+#include "k8055usbboard.h"
 
 class ControlLights : public QObject
 {
