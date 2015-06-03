@@ -13,6 +13,9 @@ class CCRSmallArena : public QObject, public ArenaInterface
 public:
     QWidget getWidget();
 
+    CCRSmallArena(QObject *parent);
+
+
 };
 
 #endif // CCRSMALLARENA_H

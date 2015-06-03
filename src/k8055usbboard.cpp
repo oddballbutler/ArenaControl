@@ -9,7 +9,7 @@ K8055USBBoard::K8055USBBoard(QObject *parent) :
     QObject(parent),
     connected(false)
 {
-    QLibrary myLib("k8055");
+    QLibrary myLib("../lib/k8055");
     myLib.load();
     if(!myLib.isLoaded())
     {

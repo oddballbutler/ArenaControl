@@ -12,38 +12,48 @@ TARGET = ArenaControl
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-    timer.cpp \
-    startstopbutton.cpp \
-    timesetter.cpp \
-    controllights.cpp \
-    buttons.cpp \
-    k8055usbboard.cpp \
-    robot.cpp \
-    team.cpp \
-    audiencescreen.cpp \
-    arenacontrol.cpp \
-    serialcontrolboard.cpp \
-    ccrsmallarena.cpp
+SOURCES += \
+    src/main.cpp\
+    src/timer.cpp \
+    src/startstopbutton.cpp \
+    src/timesetter.cpp \
+    src/controllights.cpp \
+    src/buttons.cpp \
+    src/k8055usbboard.cpp \
+    src/robot.cpp \
+    src/team.cpp \
+    src/audiencescreen.cpp \
+    src/arenacontrol.cpp \
+    src/serialcontrolboard.cpp \
+    src/ccrsmallarena.cpp
 
 HEADERS  += \
-    timer.h \
-    startstopbutton.h \
-    timesetter.h \
-    controllights.h \
-    buttons.h \
-    k8055usbboard.h \
-    robot.h \
-    team.h \
-    audiencescreen.h \
-    arenacontrol.h \
-    controlboardinterface.h \
-    serialcontrolboard.h \
-    arenaInterface.h \
-    ccrsmallarena.h
+    include/timer.h \
+    include/startstopbutton.h \
+    include/timesetter.h \
+    include/controllights.h \
+    include/buttons.h \
+    include/k8055usbboard.h \
+    include/robot.h \
+    include/team.h \
+    include/audiencescreen.h \
+    include/arenacontrol.h \
+    include/controlboardinterface.h \
+    include/serialcontrolboard.h \
+    include/arenaInterface.h \
+    include/ccrsmallarena.h
 
-FORMS    += arenacontrol.ui \
-    audiencescreen.ui
+FORMS    += \
+    forms/arenacontrol.ui \
+    forms/audiencescreen.ui
 
 RESOURCES += \
-    controlResources.qrc
+    resources/controlResources.qrc
+
+INCLUDEPATH += \
+    include
+
+install_libs.path = $$OUT_PWD/lib
+install_libs.files += lib/k8055.dll
+
+INSTALLS += install_libs

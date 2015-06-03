@@ -10,6 +10,9 @@ class SerialControlBoard : public QObject, public ControlBoardInterface
     Q_OBJECT
 public:
 
+    SerialControlBoard(const QString &name, QObject *parent);
+    SerialControlBoard(const QSerialPortInfo &serialPortInfo, QObject *parent);
+    ~SerialControlBoard();
 signals:
 
 public slots:
